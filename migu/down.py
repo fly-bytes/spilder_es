@@ -1,8 +1,11 @@
+import json
 from urllib import parse
 
 import requests
 from tools.AESTools import aes_encrypt
 from tools.RSATools import ras_encrypt
+
+# 某音乐js加解密，获取音乐真实播放路径
 
 # 咪咕加密RSA公钥
 pub_key = '''MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC8asrfSaoOb4je+DSmKdriQJKWVJ2oDZrs3wi5W67m3LwTB9QVR+cE3XWU21Nx+YBxS0yun8wDcjgQvYt625ZCcgin2ro/eOkNyUOTBIbuj9CvMnhUYiR61lC1f1IGbrSYYimqBVSjpifVufxtx/I3exReZosTByYp4Xwpb1+WAQIDAQAB'''
@@ -12,7 +15,7 @@ aes_key = '4ea5c508a6566e76240543f8feb06fd457777be39549c4016436afda65d2330e'
 data = {
     "dataType": "2",
     # 歌曲信息AES加密
-    "data": '{"copyrightId":"60054701897","type":1,"auditionsFlag":0}',
+    "data": '{"copyrightId":"6005970GEDY","type":1,"auditionsFlag":0}',
     # RAS加密AES公钥
     "secKey": '4ea5c508a6566e76240543f8feb06fd457777be39549c4016436afda65d2330e'
 }
@@ -42,5 +45,5 @@ if __name__ == '__main__':
     )
     r = requests.session()
     s = r.get(info, headers=header)
-    print(s.status_code)
     print(s.json())
+    print('真实歌曲路径', s.json()['data']['playUrl'])
