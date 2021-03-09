@@ -4,7 +4,7 @@ import time
 import tushare as ts
 from sqlalchemy import create_engine
 
-from a.DBUtil import DBUtil
+from tools.DBUtil import DBUtil
 
 ts.set_token('336c13b4bea04e188b0f9d1ae3f68dfd38d9d1ee7f0c489f94a4b7c8')
 
