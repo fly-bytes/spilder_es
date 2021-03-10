@@ -1,6 +1,7 @@
 import datetime
 import json
 
+import requests
 import requests as r
 from tools.Ua import *
 import pandas as pd
@@ -27,5 +28,17 @@ def down_jj_code():
     print(s)
 
 
+def down_jz(code):
+    url = 'http://api.fund.eastmoney.com/f10/lsjz?callback=&fundCode=%s&pageIndex=1&pageSize=20000&startDate=&endDate=&_=1615384956811' % code
+    s = requests.get(url, headers={
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36'
+        , 'Referer': 'http://fundf10.eastmoney.com/'})
+
+    s = s.json()
+    s = pd.DataFrame.from_dict(s['Data']['LSJZList'])
+    s.to_csv('jj/%s-基金净值信息-%s.csv' % (code, str(datetime.date.today())), sep=',')
+    print('down load success')
+
+
 if __name__ == '__main__':
-    pass
+    down_jz('000001')
