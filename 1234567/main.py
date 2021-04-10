@@ -40,7 +40,7 @@ def down_jz(code, name):
     list = []
     for i in d:
         j = {}
-        j['基金代码'] = code
+        j['基金名称'] = name
         j['净值日期'] = i['FSRQ']
         j['单位净值'] = i['DWJZ']
         j['累计净值'] = i['LJJZ']
@@ -50,8 +50,8 @@ def down_jz(code, name):
         j['分红送配'] = i['FHFCBZ']
         list.append(j)
 
-    with open(('jj/%s-%s-基金历史净值信息-%s.csv' % (name, code, str(datetime.date.today()))), 'w') as f:
-        fieldnames = ['基金代码', '净值日期', '单位净值', '累计净值', '日增长率', '申购状态', '赎回状态', '分红送配']
+    with open(('jj/%s-%s-基金历史净值信息-%s.csv' % (name, code, str(datetime.date.today()))), 'w', newline='') as f:
+        fieldnames = ['基金名称', '净值日期', '单位净值', '累计净值', '日增长率', '申购状态', '赎回状态', '分红送配']
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         for i in list:
@@ -73,5 +73,5 @@ def down_all_code():
     print('下载完毕！')
 
 if __name__ == '__main__':
-    # down_jz('162411')
+    # down_jz('162411', 'asas')
     down_all_code()
