@@ -14,14 +14,15 @@ from werkzeug.utils import secure_filename
 import uuid
 import filetype
 from PDF_Read import *
+import logging
+import utils
 
 app = Flask(__name__, static_folder='.' + os.sep + 'upload_pics')
 
 UPLOAD_FOLDER = 'upload_pdf'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
-import logging
+app.config['MAX_CONTENT_LENGTH'] = 30 * 1024 * 1024
+types = ["jpg", "png", "pdf"]
 
 
 @app.route('/pf_ud')
@@ -35,11 +36,12 @@ def pdf_uploader():
     if request.method == 'POST':
         f = request.files['file']
         app.logger.info(f.filename)
-        kind = filetype.guess(copy.deepcopy(f.stream))
-        app.logger.info('File extension: %s' % kind.extension)
-        app.logger.info('File MIME type: %s' % kind.mime)
 
-        if kind.extension != 'pdf':
+        file_type = utils.File_Type()
+        f_type = file_type.stream_type(f.read(), types)
+        app.logger.info('File MIME type: %s' % f_type)
+
+        if f_type != 'pdf' or f_type is None:
             return 'oh mygod,file uploaded'
 
         file_path = app.config['UPLOAD_FOLDER'] + os.sep + datetime.datetime.today().strftime('%Y-%m-%d')
@@ -78,3 +80,4 @@ if __name__ == '__main__':
     app.logger.info('this server is running...')
     server = pywsgi.WSGIServer(('0.0.0.0', 5001), app)
     server.serve_forever()
+    # app.run(port=5001)
