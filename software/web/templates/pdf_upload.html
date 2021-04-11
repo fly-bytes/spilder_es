@@ -1,0 +1,35 @@
+<html>
+<head>
+    <title>File Upload</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+</head>
+<body>
+<form>
+    <input type="file" name="file" id='pdf_d' accept=".pdf"/>
+    <input type="button" onclick="uploadPdf()" value="上传"/>
+</form>
+<a href="" id="dn" style="display:none">下载</a>
+<script type="text/javascript">
+      function uploadPdf() {
+         var form = document.getElementById('pdf_d').files;
+         var formData = new FormData();
+         formData.append('file', form[0]);
+         $.ajax({
+            url:"/pf_ur",
+            type:"post",
+            data:formData,
+            processData:false,
+            contentType:false,
+            success:function(res){
+                console.log(res);
+                document.getElementById('dn').href = '/f_dn/' + res;
+                document.getElementById('dn').style.display = 'block';
+            },
+            error:function(err){
+             alert("网络连接失败,稍后重试",err);
+            }
+         })
+      }
+</script>
+</body>
+</html>

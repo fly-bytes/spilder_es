@@ -3,7 +3,6 @@ python 3.9
 pip --default-timeout=6000 install pyocr
 pip --default-timeout=6000 install pdfminer3k
 '''
-
 import pyocr
 import importlib
 import sys
@@ -19,14 +18,10 @@ from pdfminer.converter import PDFPageAggregator
 from pdfminer.layout import LTTextBoxHorizontal, LAParams
 from pdfminer.pdfinterp import PDFTextExtractionNotAllowed
 
-filename = 'jianli'
-# text_path = filename + '.pdf'
-text_path = 'E:\\liubingxu\\py\\spilder_es\\software\\pdf\\a.pdf'
-
 
 # pwd=文档密码
-def parse(pwd=''):
-    fp = open(text_path, 'rb')
+def parse(file_path, filename, seq, pwd=''):
+    fp = open(file_path + seq + filename, 'rb')
     # 用文件对象创建一个PDF文档分析器
     parser = PDFParser(fp)
     # 创建一个PDF文档
@@ -50,7 +45,6 @@ def parse(pwd=''):
         interpreter = PDFPageInterpreter(rsrcmgr, device)
 
         # 循环遍历列表，每次处理一个page内容
-        # doc.get_pages() 获取page列表
         results = ''
         for page in doc.get_pages():
             interpreter.process_page(page)
@@ -61,12 +55,9 @@ def parse(pwd=''):
             # 想要获取文本就获得对象的text属性，
             for x in layout:
                 if (isinstance(x, LTTextBoxHorizontal)):
-                    results = results + '\n' + x.get_text()
-                    print(results)
+                    results = results + '\r\n' + x.get_text()
 
-        with codecs.open(r'' + filename + '.txt', 'w', encoding='utf-8') as f:
-            f.write(results + "\n")
-
-
-if __name__ == '__main__':
-    parse()
+        with codecs.open(file_path + seq + filename + '.txt', 'w', encoding='utf-8') as f:
+            f.write(results + '\r\n')
+        fp.close()
+        return filename + '.txt'
