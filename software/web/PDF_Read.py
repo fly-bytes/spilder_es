@@ -3,6 +3,8 @@ python 3.9
 pip --default-timeout=6000 install pyocr
 pip --default-timeout=6000 install pdfminer3k
 '''
+import os
+
 import pyocr
 import importlib
 import sys
@@ -57,7 +59,12 @@ def parse(file_path, filename, seq, pwd=''):
                 if (isinstance(x, LTTextBoxHorizontal)):
                     results = results + '\r\n' + x.get_text()
 
+
         with codecs.open(file_path + seq + filename + '.txt', 'w', encoding='utf-8') as f:
             f.write(results + '\r\n')
+
         fp.close()
         return filename + '.txt'
+
+if __name__ == '__main__':
+    parse('E:\liubingxu\py\spilder_es\software\web', '1.pdf', os.sep)

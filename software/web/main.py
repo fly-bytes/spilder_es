@@ -37,13 +37,6 @@ def pdf_uploader():
         f = request.files['file']
         app.logger.info(f.filename)
 
-        file_type = utils.File_Type()
-        f_type = file_type.stream_type(f.read(), types)
-        app.logger.info('File MIME type: %s' % f_type)
-
-        if f_type != 'pdf' or f_type is None:
-            return 'oh mygod,file uploaded'
-
         file_path = app.config['UPLOAD_FOLDER'] + os.sep + datetime.datetime.today().strftime('%Y-%m-%d')
         file_name = str(uuid.uuid1()) + f.filename[f.filename.index('.'):]
         if not os.path.exists(file_path):
@@ -52,6 +45,14 @@ def pdf_uploader():
         # 保存PDF文件
         f.save(os.path.join(file_path, secure_filename(file_name)))
         f.close()
+
+        # 判断文件类型
+        f_type = filetype.guess(file_path + os.sep + secure_filename(file_name))
+        app.logger.info('File MIME type: %s' % f_type.extension)
+
+        if f_type.extension != 'pdf' or f_type is None:
+            os.remove(file_path + os.sep + secure_filename(file_name))
+            return 'oh mygod,file uploaded'
 
         app.logger.info('开始解析:' + file_path + os.sep + file_name)
         # PDF 提取文字
@@ -78,6 +79,6 @@ if __name__ == '__main__':
     handler.setFormatter(logging_format)
     app.logger.addHandler(handler)
     app.logger.info('this server is running...')
-    server = pywsgi.WSGIServer(('0.0.0.0', 5001), app)
-    server.serve_forever()
-    # app.run(port=5001)
+    # server = pywsgi.WSGIServer(('0.0.0.0', 5001), app)
+    # server.serve_forever()
+    app.run(port=5001)

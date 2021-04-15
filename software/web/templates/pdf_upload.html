@@ -60,6 +60,7 @@
 
 
 
+
     </style>
 </head>
 <body>
@@ -107,7 +108,7 @@
 
       function uploadPdf() {
          document.getElementById("up").disabled=true;
-         innerHTML = innerHTML + '<strong>正在上传...</strong><br/>';
+         innerHTML = innerHTML + '<strong>正在上传...,请稍后...</strong><br/>';
          document.getElementById("content").innerHTML = innerHTML;
          var form = document.getElementById('pdf_d').files;
          var formData = new FormData();
@@ -122,11 +123,10 @@
                 if(res != 'oh mygod,file uploaded') {
                     document.getElementById("up").disabled=false;
                     console.log(res);
+                    innerHTML = innerHTML + '<strong>解析完成</strong>&nbsp;&nbsp;';
                     innerHTML = innerHTML + '<a href='+'/f_dn/' + res+'>点我下载</a><br/>';
                     document.getElementById("content").innerHTML = innerHTML;
                     innerHTML = innerHTML + '<strong>'+res+'</strong><br/>';
-                    document.getElementById("content").innerHTML = innerHTML;
-                    innerHTML = innerHTML + '<strong>解析完成</strong><br/>';
                     document.getElementById("content").innerHTML = innerHTML;
                 } else {
                     document.getElementById("up").disabled=false;
@@ -141,6 +141,7 @@
             }
          })
       }
+
 
 
 

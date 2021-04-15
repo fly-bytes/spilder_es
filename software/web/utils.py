@@ -1,3 +1,4 @@
+import copy
 import struct
 
 
@@ -75,6 +76,7 @@ class File_Type:
         return hexstr.upper()
 
     def stream_type(self, stream, types):
+
         tl = self.typeList(types=types)
         ftype = None
         for type_name, hcode_list in tl.items():
